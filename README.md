@@ -43,7 +43,7 @@
 | カラム名    | 型                    | 説明         |
 | ----------- | --------------------- | ------------ |
 | id          | AutoField             | PK           |
-| title       | CharField(100)        | デッキ名     |
+| title       | CharField(50)        | デッキ名     |
 | description | TextField(blank=True) | 説明（任意） |
 | created_at  | DateTimeField         | 作成日時     |
 | updated_at  | DateTimeField         | 更新日時     |
