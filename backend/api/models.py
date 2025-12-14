@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Deck(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField(max_length=500, blank=True)
@@ -11,6 +12,7 @@ class Deck(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+
 
 class Card(models.Model):
     deck = models.ForeignKey(
@@ -29,6 +31,7 @@ class Card(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+
 
 class StudyLog(models.Model):
     card = models.ForeignKey(
