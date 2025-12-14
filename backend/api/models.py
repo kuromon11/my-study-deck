@@ -27,7 +27,9 @@ class Card(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.deck.id} - {self.question[:50]}'
+        if len(self.question) > 30:
+            return f'{self.deck.title} - {self.question[:30]}...'
+        return f'{self.deck.title} - {self.question}'
 
     class Meta:
         ordering = ['-created_at']
@@ -43,7 +45,9 @@ class StudyLog(models.Model):
     is_correct = models.BooleanField()
 
     def __str__(self):
-        return f'{self.card.id} - {self.studied_at:%Y-%m-%d %H:%M:%S}'
+        if len(self.card.question) > 30:
+            return f'{self.card.deck.title} - {self.card.question[:30]}... - {self.studied_at:%Y-%m-%d %H:%M:%S}'
+        return f'{self.card.deck.title} - {self.card.question} - {self.studied_at:%Y-%m-%d %H:%M:%S}'
 
     class Meta:
         ordering = ['-studied_at']
