@@ -3,7 +3,12 @@ import DeckList from './components/DeckList.vue';
 </script>
 
 <template>
-  <DeckList />
+  <v-app>
+    <v-main class="pa-4">
+      <DeckList />
+      <v-btn color="primary">Vuetify OK</v-btn>
+    </v-main>
+  </v-app>
 </template>
 
 <style scoped>
