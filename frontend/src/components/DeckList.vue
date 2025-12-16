@@ -30,9 +30,10 @@ onMounted(async () => {
 
     <ul>
       <li v-for="deck in decks" :key="deck.id">
-        <strong>{{ deck.title }}</strong
-        ><br />
-        <small>{{ deck.description }}</small>
+        <p>{{ deck.title }}</p>
+        <p>{{ deck.description }}</p>
+        <p>{{ deck.created_at }}</p>
+        <p>{{ deck.updated_at }}</p>
       </li>
     </ul>
   </div>
