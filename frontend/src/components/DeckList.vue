@@ -1,7 +1,8 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import type { Deck } from '../interfaces/deck';
 
-const decks = ref([]);
+const decks = ref<Deck[]>([]);
 const loading = ref(true);
 const error = ref(null);
 
@@ -12,7 +13,7 @@ onMounted(async () => {
       throw new Error('Failed to fetch decks');
     }
     decks.value = await response.json();
-  } catch (err) {
+  } catch (err: any) {
     error.value = err.message;
   } finally {
     loading.value = false;
