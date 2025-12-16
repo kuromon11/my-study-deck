@@ -1,0 +1,22 @@
+.ellipsis {
+  display: inline-block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.columns th[data-column='id'],
+.columns td[data-column='id'],
+.columns th[data-column='actions'],
+.columns td[data-column='actions'] {
+  width: 50px;
+  max-width: 50px;
+}
+
+/* ID と 操作 以外の列 */
+.columns th:not([data-column='id']):not([data-column='actions']),
+.columns td:not([data-column='id']):not([data-column='actions']) {
+  width: 200px;
+  max-width: 200px;
+}
