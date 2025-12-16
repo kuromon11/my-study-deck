@@ -2,7 +2,6 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import type { Deck } from '../interfaces/deck';
-import DeckList from '../components/DeckList.vue';
 
 const decks = ref<Deck[]>([]);
 const loading = ref(false);
