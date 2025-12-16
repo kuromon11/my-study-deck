@@ -14,9 +14,7 @@
   max-width: 50px;
 }
 
-/* ID と 操作 以外の列 */
 .columns th:not([data-column='id']):not([data-column='actions']),
 .columns td:not([data-column='id']):not([data-column='actions']) {
-  width: 200px;
   max-width: 200px;
 }
