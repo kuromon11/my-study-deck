@@ -10,7 +10,6 @@ const error = ref(null);
 const headers = [
   { title: 'ID', key: 'id' },
   { title: 'タイトル', key: 'title' },
-  { title: '説明文', key: 'description' },
   { title: '作成日', key: 'created_at' },
   { title: '更新日', key: 'updated_at' },
   { title: '操作', key: 'actions', sortable: false },
@@ -57,11 +56,6 @@ onMounted(async () => {
       <template #item.title="{ item }">
         <span class="ellipsis">
           {{ item.title }}
-        </span>
-      </template>
-      <template #item.description="{ item }">
-        <span class="ellipsis">
-          {{ item.description }}
         </span>
       </template>
       <template #item.actions="{ item }">
