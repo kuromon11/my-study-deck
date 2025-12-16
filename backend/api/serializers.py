@@ -9,6 +9,8 @@ class DeckSerializer(serializers.ModelSerializer):
         required=False,
         allow_blank=True
     )
+    created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+    updated_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
 
     class Meta:
         model = Deck
@@ -24,6 +26,8 @@ class CardSerializer(serializers.ModelSerializer):
         required=False,
         allow_blank=True
     )
+    created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+    updated_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
 
     class Meta:
         model = Card
@@ -33,6 +37,7 @@ class CardSerializer(serializers.ModelSerializer):
 
 class StudyLogSerializer(serializers.ModelSerializer):
     is_correct = serializers.BooleanField()
+    studied_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
 
     class Meta:
         model = StudyLog
