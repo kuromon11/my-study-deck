@@ -1,17 +1,84 @@
 <script setup lang="ts">
-interface Props {
-  deckId: string;
-}
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import type { Card } from '../interfaces/card';
 
-const props = defineProps<Props>();
+const route = useRoute();
+const deckId = route.params.deckId as string;
+
+const cards = ref<Card[]>([]);
+const loading = ref(false);
+const error = ref<string | null>(null);
+
+const headers = [
+  { title: 'ID', key: 'id' },
+  { title: '質問', key: 'question' },
+  { title: '回答', key: 'answer' },
+  { title: '作成日', key: 'created_at' },
+  { title: '更新日', key: 'updated_at' },
+  { title: '操作', key: 'actions', sortable: false },
+];
+
+const fetchCards = async () => {
+  loading.value = true;
+  error.value = null;
+
+  try {
+    const res = await fetch(`http://localhost:8000/api/decks/${deckId}/cards/`);
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
+    cards.value = await res.json();
+  } catch (e) {
+    error.value = 'カード一覧の取得に失敗しました';
+    console.error(e);
+  } finally {
+    loading.value = false;
+  }
+};
+
+onMounted(fetchCards);
 </script>
 
 <template>
   <v-container>
-    <h1>Card List</h1>
+    <div class="d-flex align-center position-relative">
+      <h1 class="mx-auto">カード一覧</h1>
+      <v-btn class="position-absolute right-0" color="primary" href="#">
+        学習開始
+      </v-btn>
+    </div>
 
-    <v-alert type="info" class="mb-4"> Deck ID: {{ deckId }} </v-alert>
+    <v-progress-circular v-if="loading" indeterminate />
 
-    <!-- ここにカード一覧を表示 -->
+    <v-alert v-if="error" type="error">
+      {{ error }}
+    </v-alert>
+
+    <v-data-table
+      :headers="headers"
+      :items="cards"
+      :loading="loading"
+      item-key="id"
+      class="columns"
+    >
+      <template #item.question="{ item }">
+        <span class="ellipsis">
+          {{ item.question }}
+        </span>
+      </template>
+      <template #item.answer="{ item }">
+        <span class="ellipsis">
+          {{ item.answer }}
+        </span>
+      </template>
+      <template #item.actions="{ item }">
+        <v-btn icon variant="text">
+          <v-icon icon="mdi-pencil" />
+        </v-btn>
+      </template>
+    </v-data-table>
+
+    <p v-if="!loading && !error && cards.length === 0">カードがありません</p>
   </v-container>
 </template>
