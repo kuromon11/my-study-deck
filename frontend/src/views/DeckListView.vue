@@ -39,8 +39,13 @@ onMounted(async () => {
 
 <template>
   <v-container>
-    <h4 class="text-h4 mb-4">デッキ一覧</h4>
-    <p class="mb-4">デッキのタイトルを選択すると、カード一覧が表示されます。</p>
+    <div class="d-flex align-center position-relative">
+      <h4 class="text-h4 mx-auto">デッキ一覧</h4>
+      <div class="position-absolute right-0">
+        <v-btn color="success" href="#"> 追加 </v-btn>
+      </div>
+    </div>
+    <p class="my-2">デッキのタイトルを選択すると、カード一覧が表示されます。</p>
 
     <v-alert v-if="error" type="error" class="mb-4">
       {{ error }}

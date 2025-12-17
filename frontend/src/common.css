@@ -16,7 +16,7 @@
 
 .columns th:not([data-column='id']):not([data-column='actions']),
 .columns td:not([data-column='id']):not([data-column='actions']) {
-  max-width: 350px;
+  max-width: 280px;
 }
 
 .table-link {

@@ -43,9 +43,10 @@ onMounted(fetchCards);
   <v-container>
     <div class="d-flex align-center position-relative">
       <h4 class="text-h4 mx-auto">カード一覧</h4>
-      <v-btn class="position-absolute right-0" color="primary" href="#">
-        学習開始
-      </v-btn>
+      <div class="position-absolute right-0">
+        <v-btn color="success" href="#"> 追加 </v-btn>
+        <v-btn color="primary ml-4" href="#"> 学習開始 </v-btn>
+      </div>
     </div>
 
     <v-progress-circular v-if="loading" indeterminate />
