@@ -43,7 +43,7 @@ onMounted(fetchCards);
 <template>
   <v-container>
     <div class="d-flex align-center position-relative">
-      <h1 class="mx-auto">カード一覧</h1>
+      <h4 class="text-h4 mx-auto">カード一覧</h4>
       <v-btn class="position-absolute right-0" color="primary" href="#">
         学習開始
       </v-btn>

@@ -40,7 +40,7 @@ onMounted(async () => {
 
 <template>
   <v-container>
-    <h1 class="mb-4">デッキ一覧</h1>
+    <h4 class="text-h4 mb-4">デッキ一覧</h4>
 
     <v-alert v-if="error" type="error" class="mb-4">
       {{ error }}
