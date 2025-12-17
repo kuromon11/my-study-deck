@@ -41,6 +41,7 @@ onMounted(async () => {
 <template>
   <v-container>
     <h4 class="text-h4 mb-4">デッキ一覧</h4>
+    <p class="mb-4">デッキのタイトルを選択すると、カード一覧が表示されます。</p>
 
     <v-alert v-if="error" type="error" class="mb-4">
       {{ error }}
@@ -54,9 +55,9 @@ onMounted(async () => {
       class="columns"
     >
       <template #item.title="{ item }">
-        <span class="ellipsis">
+        <router-link :to="`/${item.id}/cards`" class="ellipsis table-link">
           {{ item.title }}
-        </span>
+        </router-link>
       </template>
       <template #item.actions="{ item }">
         <v-btn icon variant="text">

@@ -16,5 +16,13 @@
 
 .columns th:not([data-column='id']):not([data-column='actions']),
 .columns td:not([data-column='id']):not([data-column='actions']) {
-  max-width: 200px;
+  max-width: 350px;
+}
+
+.table-link {
+  color: inherit;
+  text-decoration: none;
+}
+.table-link:hover {
+  text-decoration: underline;
 }
