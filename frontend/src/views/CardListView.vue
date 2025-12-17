@@ -44,8 +44,8 @@ onMounted(fetchCards);
     <div class="d-flex align-center position-relative">
       <h4 class="text-h4 mx-auto">カード一覧</h4>
       <div class="position-absolute right-0">
-        <v-btn color="success" href="#"> 追加 </v-btn>
-        <v-btn color="primary ml-4" href="#"> 学習開始 </v-btn>
+        <v-btn color="success" size="small" href="#"> 追加 </v-btn>
+        <v-btn color="primary ml-4" size="small" href="#"> 学習開始 </v-btn>
       </div>
     </div>
 
