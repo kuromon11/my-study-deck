@@ -11,11 +11,11 @@ const loading = ref(false);
 const error = ref<string | null>(null);
 
 const headers = [
-  { title: 'ID', key: 'id' },
-  { title: '質問', key: 'question' },
-  { title: '回答', key: 'answer' },
-  { title: '最終更新日', key: 'updated_at' },
-  { title: '操作', key: 'actions', sortable: false },
+  { title: 'ID', key: 'id', align: 'center' },
+  { title: '質問', key: 'question', align: 'center' },
+  { title: '回答', key: 'answer', align: 'center' },
+  { title: '最終更新日', key: 'updated_at', align: 'center' },
+  { title: '操作', key: 'actions', align: 'center', sortable: false },
 ];
 
 const fetchCards = async () => {

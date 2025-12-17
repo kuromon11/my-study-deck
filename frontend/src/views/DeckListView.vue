@@ -8,10 +8,10 @@ const loading = ref(false);
 const error = ref(null);
 
 const headers = [
-  { title: 'ID', key: 'id' },
-  { title: 'タイトル', key: 'title' },
-  { title: '最終更新日', key: 'updated_at' },
-  { title: '操作', key: 'actions', sortable: false },
+  { title: 'ID', key: 'id', align: 'center' },
+  { title: 'タイトル', key: 'title', align: 'center' },
+  { title: '最終更新日', key: 'updated_at', align: 'center' },
+  { title: '操作', key: 'actions', align: 'center', sortable: false },
 ];
 
 const fetchDecks = async () => {
