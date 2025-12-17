@@ -8,11 +8,10 @@ const loading = ref(false);
 const error = ref(null);
 
 const headers = [
-  { title: 'ID', key: 'id' },
-  { title: 'タイトル', key: 'title' },
-  { title: '作成日', key: 'created_at' },
-  { title: '更新日', key: 'updated_at' },
-  { title: '操作', key: 'actions', sortable: false },
+  { title: 'ID', key: 'id', align: 'center' },
+  { title: 'タイトル', key: 'title', align: 'center' },
+  { title: '最終更新日', key: 'updated_at', align: 'center' },
+  { title: '操作', key: 'actions', align: 'center', sortable: false },
 ];
 
 const fetchDecks = async () => {
@@ -40,7 +39,13 @@ onMounted(async () => {
 
 <template>
   <v-container>
-    <h1 class="mb-4">デッキ一覧</h1>
+    <div class="d-flex align-center position-relative">
+      <h4 class="text-h4 mx-auto">デッキ一覧</h4>
+      <div class="position-absolute right-0">
+        <v-btn size="small" color="success" href="#"> 追加 </v-btn>
+      </div>
+    </div>
+    <p class="my-2">デッキのタイトルを選択すると、カード一覧が表示されます。</p>
 
     <v-alert v-if="error" type="error" class="mb-4">
       {{ error }}
@@ -54,9 +59,9 @@ onMounted(async () => {
       class="columns"
     >
       <template #item.title="{ item }">
-        <span class="ellipsis">
+        <router-link :to="`/${item.id}/cards`" class="ellipsis table-link">
           {{ item.title }}
-        </span>
+        </router-link>
       </template>
       <template #item.actions="{ item }">
         <v-btn icon variant="text">
