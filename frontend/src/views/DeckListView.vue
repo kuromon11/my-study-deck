@@ -10,8 +10,7 @@ const error = ref(null);
 const headers = [
   { title: 'ID', key: 'id' },
   { title: 'タイトル', key: 'title' },
-  { title: '作成日', key: 'created_at' },
-  { title: '更新日', key: 'updated_at' },
+  { title: '最終更新日', key: 'updated_at' },
   { title: '操作', key: 'actions', sortable: false },
 ];
 
