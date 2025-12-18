@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue';
 import type { Deck } from '../interfaces/deck';
 import { useDecks } from './../composables/useDecks';
 
-const { decks, fetchDecks, createDeck, updateDeck } = useDecks();
+const { decks, fetchDecks, createDeck, updateDeck, deleteDeck } = useDecks();
 
 const loading = ref(false);
 const error = ref(null);
@@ -69,6 +69,19 @@ const save = async () => {
   );
   dialog.value = false;
   saving.value = false;
+};
+
+const deleting = ref(false);
+const onDelete = async (id: number) => {
+  deleting.value = true;
+  try {
+    await deleteDeck(id);
+    decks.value = decks.value.filter((d) => d.id !== id);
+    dialog.value = false;
+    deleting.value = false;
+  } finally {
+    deleting.value = false;
+  }
 };
 
 onMounted(async () => {

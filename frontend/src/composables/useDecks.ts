@@ -52,5 +52,18 @@ export const useDecks = () => {
     return (await res.json()) as Deck;
   };
 
-  return { decks, fetchDecks, createDeck, updateDeck };
+  const deleteDeck = async (id: number) => {
+    const res = await fetch(`${DECKS_API_URL}${id}/`, {
+      method: 'DELETE',
+    });
+
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(
+        `deleteDeck failed: ${res.status} ${res.statusText} - ${text}`
+      );
+    }
+  };
+
+  return { decks, fetchDecks, createDeck, updateDeck, deleteDeck };
 };
