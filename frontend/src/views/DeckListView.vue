@@ -134,18 +134,30 @@ onMounted(async () => {
           </v-form>
         </v-card-text>
 
-        <v-card-actions>
-          <v-spacer />
-          <v-btn variant="text" @click="closeDialog">キャンセル</v-btn>
-          <v-btn
-            type="submit"
-            color="primary"
-            :loading="saving"
-            :disabled="!formValid"
-            @click="save"
-          >
-            保存
-          </v-btn>
+        <v-card-actions class="d-flex justify-space-between">
+          <div>
+            <v-btn
+              v-if="editingId"
+              variant="text"
+              color="error"
+              :loading="deleting"
+              @click="onDelete(editingId)"
+            >
+              削除
+            </v-btn>
+          </div>
+          <div class="d-flex align-center ga-2">
+            <v-btn variant="text" @click="closeDialog">キャンセル</v-btn>
+            <v-btn
+              type="submit"
+              color="primary"
+              :loading="saving"
+              :disabled="!formValid"
+              @click="save"
+            >
+              保存
+            </v-btn>
+          </div>
         </v-card-actions>
       </v-card>
     </v-dialog>
