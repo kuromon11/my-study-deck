@@ -11,7 +11,7 @@ class Deck(models.Model):
         return self.title
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['-updated_at']
 
 
 class Card(models.Model):
@@ -32,7 +32,7 @@ class Card(models.Model):
         return f'{self.deck.title} - {self.question}'
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['-updated_at']
 
 
 class StudyLog(models.Model):
