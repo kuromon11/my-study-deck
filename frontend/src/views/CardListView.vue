@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import type { Card } from '../interfaces/card';
+import { DECKS_API_URL } from './../constants/api';
 
 const route = useRoute();
 const deckId = route.params.deckId as string;
@@ -23,7 +24,7 @@ const fetchCards = async () => {
   error.value = null;
 
   try {
-    const res = await fetch(`http://localhost:8000/api/decks/${deckId}/cards/`);
+    const res = await fetch(`${DECKS_API_URL}${deckId}/cards/`);
     if (!res.ok) {
       throw new Error(`HTTP ${res.status}`);
     }
