@@ -9,13 +9,13 @@ class DeckSerializer(serializers.ModelSerializer):
         required=False,
         allow_blank=True
     )
-    created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
-    updated_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+    created_at = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M:%S")
+    updated_at = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M:%S")
 
     class Meta:
         model = Deck
-        fields = '__all__'
-        read_only_fields = ('created_at', 'updated_at')
+        fields = ('id', 'title', 'description', 'created_at', 'updated_at')
+        read_only_fields = ('id', 'created_at', 'updated_at')
 
 
 class CardSerializer(serializers.ModelSerializer):
@@ -26,21 +26,21 @@ class CardSerializer(serializers.ModelSerializer):
         required=False,
         allow_blank=True
     )
-    created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
-    updated_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+    created_at = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M:%S")
+    updated_at = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M:%S")
 
     class Meta:
         model = Card
-        fields = '__all__'
+        fields = ('id', 'question', 'answer', 'notes', 'created_at', 'updated_at')
+        read_only_fields = ('id', 'created_at', 'updated_at')
         read_only_fields = ('created_at', 'updated_at')
 
 
 class StudyLogSerializer(serializers.ModelSerializer):
     is_correct = serializers.BooleanField()
-    studied_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+    studied_at = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M:%S")
 
     class Meta:
         model = StudyLog
-        fields = '__all__'
-        # NOTE: 要素が1個のタプルには末尾にカンマが必要
-        read_only_fields = ('studied_at',)
+        fields = ('id', 'is_correct', 'studied_at')
+        read_only_fields = ('id', 'studied_at')

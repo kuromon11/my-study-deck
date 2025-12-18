@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import type { Card } from '../interfaces/card';
+import { DECKS_API_URL } from './../constants/api';
 
 const route = useRoute();
 const deckId = route.params.deckId as string;
@@ -23,7 +24,7 @@ const fetchCards = async () => {
   error.value = null;
 
   try {
-    const res = await fetch(`http://localhost:8000/api/decks/${deckId}/cards/`);
+    const res = await fetch(`${DECKS_API_URL}${deckId}/cards/`);
     if (!res.ok) {
       throw new Error(`HTTP ${res.status}`);
     }
@@ -42,6 +43,11 @@ onMounted(fetchCards);
 <template>
   <v-container>
     <div class="d-flex align-center position-relative">
+      <div class="position-absolute left-0">
+        <router-link to="/">
+          <v-btn variant="text" color="grey"> デッキ一覧に戻る </v-btn>
+        </router-link>
+      </div>
       <h4 class="text-h4 mx-auto">カード一覧</h4>
       <div class="position-absolute right-0">
         <v-btn color="success" size="small" href="#"> 追加 </v-btn>
