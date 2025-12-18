@@ -42,6 +42,11 @@ onMounted(fetchCards);
 <template>
   <v-container>
     <div class="d-flex align-center position-relative">
+      <div class="position-absolute left-0">
+        <router-link to="/">
+          <v-btn variant="text" color="grey"> デッキ一覧に戻る </v-btn>
+        </router-link>
+      </div>
       <h4 class="text-h4 mx-auto">カード一覧</h4>
       <div class="position-absolute right-0">
         <v-btn color="success" size="small" href="#"> 追加 </v-btn>
