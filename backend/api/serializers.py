@@ -14,8 +14,8 @@ class DeckSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Deck
-        fields = '__all__'
-        read_only_fields = ('created_at', 'updated_at')
+        fields = ('id', 'title', 'description', 'created_at', 'updated_at')
+        read_only_fields = ('id', 'created_at', 'updated_at')
 
 
 class CardSerializer(serializers.ModelSerializer):
@@ -31,7 +31,8 @@ class CardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Card
-        fields = '__all__'
+        fields = ('id', 'question', 'answer', 'notes', 'created_at', 'updated_at')
+        read_only_fields = ('id', 'created_at', 'updated_at')
         read_only_fields = ('created_at', 'updated_at')
 
 
@@ -41,6 +42,5 @@ class StudyLogSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = StudyLog
-        fields = '__all__'
-        # NOTE: 要素が1個のタプルには末尾にカンマが必要
-        read_only_fields = ('studied_at',)
+        fields = ('id', 'is_correct', 'studied_at')
+        read_only_fields = ('id', 'studied_at')
