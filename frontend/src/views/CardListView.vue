@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import type { Card } from '../interfaces/card';
-import { DECKS_API_URL } from './../constants/api';
+import { useCard } from './../composables/useCard';
+
+const { cards, fetchCards } = useCard();
 
 const route = useRoute();
 const deckId = route.params.deckId as string;
 
-const cards = ref<Card[]>([]);
 const loading = ref(false);
 const error = ref<string | null>(null);
 
@@ -19,25 +19,18 @@ const headers = [
   { title: '操作', key: 'actions', align: 'center', sortable: false },
 ];
 
-const fetchCards = async () => {
+const init = async () => {
   loading.value = true;
   error.value = null;
 
   try {
-    const res = await fetch(`${DECKS_API_URL}${deckId}/cards/`);
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status}`);
-    }
-    cards.value = await res.json();
-  } catch (e) {
-    error.value = 'カード一覧の取得に失敗しました';
-    console.error(e);
-  } finally {
+    await fetchCards(Number(deckId));
     loading.value = false;
+  } catch (_) {
+    error.value = 'カード一覧の取得に失敗しました';
   }
 };
-
-onMounted(fetchCards);
+onMounted(init);
 </script>
 
 <template>
