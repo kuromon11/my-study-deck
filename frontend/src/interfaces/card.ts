@@ -6,6 +6,7 @@ export interface Card {
   updated_at: string;
 }
 
-export interface CardDetail extends Card {
-  notes: string;
+export interface CardForm {
+  question: string;
+  answer: string;
 }
