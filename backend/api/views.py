@@ -1,5 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from .models import Deck, Card, StudyLog
 from .serializers import (
     DeckSerializer,
@@ -27,6 +27,14 @@ class CardListByDeckView(ListCreateAPIView):
     def perform_create(self, serializer):
         deck_id = self.kwargs["deck_id"]
         serializer.save(deck_id=deck_id)
+
+
+class CardDetailByDeckView(RetrieveUpdateDestroyAPIView):
+    serializer_class = CardSerializer
+
+    def get_queryset(self):
+        deck_id = self.kwargs["deck_id"]
+        return Card.objects.filter(deck_id=deck_id)
 
 
 class StudyLogViewSet(ModelViewSet):
