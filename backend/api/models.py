@@ -22,7 +22,6 @@ class Card(models.Model):
     )
     question = models.TextField(max_length=500)
     answer = models.TextField(max_length=500)
-    notes = models.TextField(max_length=500, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -20,15 +20,12 @@ const rules = {
   max50: (v: string) => (v?.length ?? 0) <= 50 || '50文字以内にしてください',
 };
 
-const dialog = ref(false);
-const editingId = ref<number | null>(null);
-
-const formValid = ref(false);
-const saving = ref(false);
-
 const form = ref({
   title: '',
 });
+
+const dialog = ref(false);
+const editingId = ref<number | null>(null);
 
 const openCreate = () => {
   editingId.value = null;
@@ -48,6 +45,8 @@ const closeDialog = () => {
   editingId.value = null;
 };
 
+const saving = ref(false);
+const formValid = ref(false);
 const save = async () => {
   if (!formValid.value) return;
   saving.value = true;
@@ -74,21 +73,17 @@ const save = async () => {
 const deleting = ref(false);
 const onDelete = async (id: number) => {
   deleting.value = true;
-  try {
-    await deleteDeck(id);
-    decks.value = decks.value.filter((d) => d.id !== id);
-    dialog.value = false;
-    deleting.value = false;
-  } finally {
-    deleting.value = false;
-  }
+  await deleteDeck(id);
+  decks.value = decks.value.filter((d) => d.id !== id);
+  dialog.value = false;
+  deleting.value = false;
 };
 
 onMounted(async () => {
   try {
     loading.value = true;
-    error.value = null;
     await fetchDecks();
+    error.value = null;
     loading.value = false;
   } catch (err: any) {
     error.value = err.message;
