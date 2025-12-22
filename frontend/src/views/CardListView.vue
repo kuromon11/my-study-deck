@@ -121,7 +121,9 @@ onMounted(init);
       <h4 class="text-h4 mx-auto">カード一覧</h4>
       <div class="position-absolute right-0">
         <v-btn color="success" size="small" @click="openCreate"> 追加 </v-btn>
-        <v-btn color="primary ml-4" size="small"> 学習開始 </v-btn>
+        <router-link :to="`/${deckId}/study`">
+          <v-btn color="primary ml-4" size="small"> 学習開始 </v-btn>
+        </router-link>
       </div>
     </div>
 

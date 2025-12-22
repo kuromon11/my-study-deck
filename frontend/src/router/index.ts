@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import DeckListView from './../views/DeckListView.vue';
 import CardListView from './../views/CardListView.vue';
+import StudyView from './../views/StudyView.vue';
 
 const routes = [
   {
@@ -12,6 +13,12 @@ const routes = [
     path: '/:deckId/cards',
     name: 'cards',
     component: CardListView,
+    props: true,
+  },
+  {
+    path: '/:deckId/study',
+    name: 'study',
+    component: StudyView,
     props: true,
   },
 ];
