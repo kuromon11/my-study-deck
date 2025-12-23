@@ -1,10 +1,12 @@
+from django.db.models import Prefetch
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from .models import Deck, Card, StudyLog
 from .serializers import (
     DeckSerializer,
     CardSerializer,
     StudyLogSerializer,
+    CardWithLogsSerializer,
 )
 
 
@@ -40,3 +42,18 @@ class CardDetailByDeckView(RetrieveUpdateDestroyAPIView):
 class StudyLogViewSet(ModelViewSet):
     queryset = StudyLog.objects.all()
     serializer_class = StudyLogSerializer
+
+
+class DeckCardListWithLogsView(ListAPIView):
+    serializer_class = CardWithLogsSerializer
+
+    def get_queryset(self):
+        deck_id = self.kwargs["deck_id"]
+
+        logs_qs = StudyLog.objects.order_by("-studied_at")
+
+        return (
+            Card.objects.filter(deck_id=deck_id)
+            .prefetch_related(Prefetch("study_logs", queryset=logs_qs))
+            .order_by("-id")
+        )
