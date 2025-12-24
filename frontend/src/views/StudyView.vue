@@ -24,6 +24,12 @@ const nextCard = () => {
   }
 };
 
+const restart = async () => {
+  currentIndex.value = 0;
+  completionModal.value = false;
+  await fetchCardsWithLogs();
+};
+
 const handleAnswer = async (answer: boolean) => {
   await createLog(Number(currentCard.value.id), answer);
   nextCard();
@@ -141,14 +147,7 @@ onMounted(async () => {
             すべてのカードが完了しました。お疲れ様でした！
           </v-alert>
           <div class="d-flex justify-center mt-4">
-            <v-btn
-              color="primary"
-              variant="text"
-              @click="
-                currentIndex = 0;
-                completionModal = false;
-              "
-            >
+            <v-btn color="primary" variant="text" @click="restart">
               最初から解き直す
             </v-btn>
           </div>
