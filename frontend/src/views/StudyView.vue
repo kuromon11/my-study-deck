@@ -55,7 +55,14 @@ onMounted(async () => {
             <v-btn variant="text" color="grey"> カード一覧に戻る </v-btn>
           </router-link>
         </div>
-        <div v-if="!completionModal && cards.length > 0" class="mb-4">
+        <div
+          v-if="
+            !completionModal &&
+            cards.length > 0 &&
+            currentCard.study_logs.length > 0
+          "
+          class="mb-4"
+        >
           <div class="text-body-2 text-center">
             正答率:
             {{
