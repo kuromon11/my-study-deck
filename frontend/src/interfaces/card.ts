@@ -15,11 +15,13 @@ export interface CardWithLogs {
   id: number;
   question: string;
   answer: string;
-  study_logs: {
-    id: number;
-    studied_at: string;
-    is_correct: boolean;
-  };
+  study_logs: StudyLog[];
   created_at: string;
   updated_at: string;
+}
+
+export interface StudyLog {
+  id: number;
+  studied_at: string;
+  is_correct: boolean;
 }
