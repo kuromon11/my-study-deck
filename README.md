@@ -1,6 +1,27 @@
 # 暗記アプリ My Study Deck
 
-# 設計
+## 概要
+- 暗記カードを使った学習ができるアプリケーションです。
+- 複数のデッキを作成し、それぞれのデッキにカードを作成できます。
+- 作成したデッキ・カードを使って、繰り返し学習できます。
+- 学習内容は記録されます。
+
+## 技術スタック
+
+### Backend
+
+- Python 3.10.12
+- Django 5.2.9
+- django-cors-headers 3.16.1
+- djangorestframework 4.9.0
+
+### Frontend
+
+- Vue 3.5.24
+- VueRouter 4.6.4
+- Vuetify 3.11.4
+- TypeScript 5.9.3
+- Vite 7.2.4
 
 ## 画面
 
