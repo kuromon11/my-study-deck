@@ -39,3 +39,11 @@ class StudyLogSerializer(serializers.ModelSerializer):
         model = StudyLog
         fields = ('id', 'is_correct', 'studied_at')
         read_only_fields = ('id', 'studied_at')
+
+
+class CardWithLogsSerializer(serializers.ModelSerializer):
+    study_logs = StudyLogSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Card
+        fields = ["id", "question", "answer", "study_logs", "created_at", "updated_at"]

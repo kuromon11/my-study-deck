@@ -1,10 +1,13 @@
+from django.db.models import Prefetch
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView
+from django.shortcuts import get_object_or_404
 from .models import Deck, Card, StudyLog
 from .serializers import (
     DeckSerializer,
     CardSerializer,
     StudyLogSerializer,
+    CardWithLogsSerializer,
 )
 
 
@@ -40,3 +43,31 @@ class CardDetailByDeckView(RetrieveUpdateDestroyAPIView):
 class StudyLogViewSet(ModelViewSet):
     queryset = StudyLog.objects.all()
     serializer_class = StudyLogSerializer
+
+
+class DeckCardListWithLogsView(ListAPIView):
+    serializer_class = CardWithLogsSerializer
+
+    def get_queryset(self):
+        deck_id = self.kwargs["deck_id"]
+
+        logs_qs = StudyLog.objects.order_by("-studied_at")
+
+        return (
+            Card.objects.filter(deck_id=deck_id)
+            .prefetch_related(Prefetch("study_logs", queryset=logs_qs))
+            .order_by("-id")
+        )
+
+
+class StudyLogCreateByDeckCardView(CreateAPIView):
+    serializer_class = StudyLogSerializer
+
+    def perform_create(self, serializer):
+        deck_id = self.kwargs["deck_id"]
+        card_pk = self.kwargs["pk"]
+
+        # deck配下のcardであることを保証（他デッキのカードに誤登録しない）
+        card = get_object_or_404(Card, id=card_pk, deck_id=deck_id)
+
+        serializer.save(card=card)
