@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import DeckViewSet, CardViewSet, CardListByDeckView, StudyLogViewSet, CardDetailByDeckView, DeckCardListWithLogsView
+from .views import DeckViewSet, CardViewSet, CardListByDeckView, StudyLogViewSet, CardDetailByDeckView, DeckCardListWithLogsView, StudyLogCreateByDeckCardView
 
 router = DefaultRouter()
 router.register(r'decks', DeckViewSet)
@@ -14,7 +14,11 @@ urlpatterns = [
         CardListByDeckView.as_view(),
         name='deck-cards',
     ),
-    path('decks/<int:deck_id>/cards/<int:pk>/', CardDetailByDeckView.as_view(), name='deck-card-detail'),
+    path(
+        'decks/<int:deck_id>/cards/<int:pk>/study/',
+        StudyLogCreateByDeckCardView.as_view(),
+        name='deck-card-detail'
+    ),
     path(
         'decks/<int:deck_id>/cards-with-logs/',
         DeckCardListWithLogsView.as_view(),
