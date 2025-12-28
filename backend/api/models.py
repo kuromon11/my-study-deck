@@ -48,4 +48,5 @@ class StudyLog(models.Model):
         return f'{self.card.deck.title} - {self.card.question} - {self.studied_at:%Y-%m-%d %H:%M:%S}'
 
     class Meta:
+        db_table = 'api_study_log'
         ordering = ['-studied_at']
