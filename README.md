@@ -45,7 +45,7 @@
 
 ## テーブル構成
 
-### Deck（デッキ）
+### deck（デッキ）
 
 | カラム名    | 型                    | 説明         |
 | ----------- | --------------------- | ------------ |
@@ -54,7 +54,7 @@
 | created_at  | DateTimeField         | 作成日時     |
 | updated_at  | DateTimeField         | 更新日時     |
 
-### Card（カード）
+### card（カード）
 
 | カラム名   | 型                    | 説明               |
 | ---------- | --------------------- | ------------------ |
@@ -65,7 +65,7 @@
 | created_at | DateTimeField         | 作成日時           |
 | updated_at | DateTimeField         | 更新日時           |
 
-### StudyLog（学習ログ）
+### study_log（学習ログ）
 
 | カラム名   | 型               | 説明       |
 | ---------- | ---------------- | ---------- |
@@ -73,3 +73,34 @@
 | card_id    | ForeignKey(Card) | カード ID  |
 | studied_at | DateTimeField    | 学習日時   |
 | is_correct | BooleanField     | 正解したか |
+
+## ER図
+
+```mermaid
+erDiagram
+    deck ||--o{ card : has
+    card ||--o{ study_log : has
+
+    deck {
+        int id
+        string title
+        datetime created_at
+        datetime updated_at
+    }
+
+    card {
+        int id
+        int deck_id
+        string question
+        string answer
+        datetime created_at
+        datetime updated_at
+    }
+
+    study_log {
+        int id
+        int card_id
+        datetime studied_at
+        boolean is_correct
+    }
+```

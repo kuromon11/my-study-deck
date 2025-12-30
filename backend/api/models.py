@@ -3,7 +3,6 @@ from django.db import models
 
 class Deck(models.Model):
     title = models.CharField(max_length=50)
-    description = models.TextField(max_length=500, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -49,4 +48,5 @@ class StudyLog(models.Model):
         return f'{self.card.deck.title} - {self.card.question} - {self.studied_at:%Y-%m-%d %H:%M:%S}'
 
     class Meta:
+        db_table = 'api_study_log'
         ordering = ['-studied_at']

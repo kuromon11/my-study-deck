@@ -14,10 +14,14 @@ urlpatterns = [
         CardListByDeckView.as_view(),
         name='deck-cards',
     ),
+        path('decks/<int:deck_id>/cards/<int:pk>/',
+        CardDetailByDeckView.as_view(),
+        name='deck-card-detail'
+    ),
     path(
         'decks/<int:deck_id>/cards/<int:pk>/study/',
         StudyLogCreateByDeckCardView.as_view(),
-        name='deck-card-detail'
+        name='deck-card-study'
     ),
     path(
         'decks/<int:deck_id>/cards-with-logs/',
