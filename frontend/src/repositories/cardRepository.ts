@@ -1,13 +1,8 @@
-import type { Card } from './../interfaces/card';
+import type { Card, CardRequest } from './../interfaces/card';
 import { createRepository } from './repository';
 
-interface Payload {
-  question: string;
-  answer: string;
-}
-
 export const cardRepository = (deckId: number) => {
-  const { list, create, update, destroy } = createRepository<Card, Payload>(
+  const { list, create, update, destroy } = createRepository<Card, CardRequest>(
     `${deckId}/cards/`
   );
 
