@@ -6,7 +6,7 @@ import { useDecks } from './../composables/useDecks';
 const { decks, fetchDecks, createDeck, updateDeck, deleteDeck } = useDecks();
 
 const loading = ref(false);
-const error = ref(null);
+const errorMessage = ref<string>('');
 
 const headers = [
   { title: 'ID', key: 'id', align: 'center' },
@@ -45,48 +45,47 @@ const closeDialog = () => {
   editingId.value = null;
 };
 
-const saving = ref(false);
 const formValid = ref(false);
-const save = async () => {
+const onSave = async () => {
   if (!formValid.value) return;
-  saving.value = true;
 
-  const payload = { title: form.value.title.trim() };
+  loading.value = true;
+
   const id = editingId.value;
+  const payload = { title: form.value.title.trim() };
 
-  if (id == null) {
-    const created = await createDeck(payload);
-    decks.value = [created, ...decks.value];
+  try {
+    id === null ? await createDeck(payload) : await updateDeck(id, payload);
     dialog.value = false;
-    saving.value = false;
-    return;
+  } catch (error: any) {
+    errorMessage.value = error?.message ?? 'デッキの保存に失敗しました';
+  } finally {
+    loading.value = false;
   }
-
-  const updated = await updateDeck(id, payload);
-  decks.value = decks.value.map((d) =>
-    d.id === id ? { ...d, ...updated } : d
-  );
-  dialog.value = false;
-  saving.value = false;
 };
 
-const deleting = ref(false);
 const onDelete = async (id: number) => {
-  deleting.value = true;
-  await deleteDeck(id);
-  decks.value = decks.value.filter((d) => d.id !== id);
-  dialog.value = false;
-  deleting.value = false;
+  loading.value = true;
+
+  try {
+    await deleteDeck(id);
+    dialog.value = false;
+  } catch (error: any) {
+    errorMessage.value = error?.message ?? 'デッキの取得に失敗しました';
+  } finally {
+    loading.value = false;
+  }
 };
 
 onMounted(async () => {
+  loading.value = true;
+
   try {
-    loading.value = true;
     await fetchDecks();
-    error.value = null;
+  } catch (error: any) {
+    errorMessage.value = error?.message ?? 'デッキの取得に失敗しました';
+  } finally {
     loading.value = false;
-  } catch (err: any) {
-    error.value = err.message;
   }
 });
 </script>
@@ -101,8 +100,8 @@ onMounted(async () => {
     </div>
     <p class="my-2">デッキのタイトルを選択すると、カード一覧が表示されます。</p>
 
-    <v-alert v-if="error" type="error" class="mb-4">
-      {{ error }}
+    <v-alert v-if="errorMessage !== ''" type="error" class="mb-4">
+      {{ errorMessage }}
     </v-alert>
 
     <v-data-table
@@ -148,20 +147,22 @@ onMounted(async () => {
               v-if="editingId"
               variant="text"
               color="error"
-              :loading="deleting"
+              :loading="loading"
               @click="onDelete(editingId)"
             >
               削除
             </v-btn>
           </div>
           <div class="d-flex align-center ga-2">
-            <v-btn variant="text" @click="closeDialog">キャンセル</v-btn>
+            <v-btn variant="text" :loading="loading" @click="closeDialog"
+              >キャンセル</v-btn
+            >
             <v-btn
               type="submit"
               color="primary"
-              :loading="saving"
+              :loading="loading"
               :disabled="!formValid"
-              @click="save"
+              @click="onSave"
             >
               保存
             </v-btn>
