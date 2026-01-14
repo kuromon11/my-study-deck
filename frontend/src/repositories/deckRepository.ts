@@ -1,15 +1,19 @@
 import type { Deck } from './../interfaces/deck';
 import { DECKS_API_URL } from './../constants/api';
 
-export const list = async () => {
+interface Payload {
+  title: string;
+}
+
+export const list = async (): Promise<Deck[]> => {
   const response = await fetch(DECKS_API_URL);
   if (!response.ok) {
-    throw new Error('Failed to fetch decks');
+    throw new Error(`${response.status}: デッキの取得に失敗しました`);
   }
   return (await response.json()) as Deck[];
 };
 
-export const create = async (payload: { title: string }) => {
+export const create = async (payload: Payload): Promise<Deck> => {
   const response = await fetch(DECKS_API_URL, {
     method: 'POST',
     headers: {
@@ -17,45 +21,31 @@ export const create = async (payload: { title: string }) => {
     },
     body: JSON.stringify(payload),
   });
-
   if (!response.ok) {
-    const text = await response.text();
-    throw new Error(
-      `createDeck failed: ${response.status} ${response.statusText} - ${text}`
-    );
+    throw new Error(`${response.status}: デッキの登録に失敗しました`);
   }
-
   return (await response.json()) as Deck;
 };
 
-export const update = async (id: number, payload: { title: string }) => {
-  const res = await fetch(`${DECKS_API_URL}${id}/`, {
+export const update = async (id: number, payload: Payload): Promise<Deck> => {
+  const response = await fetch(`${DECKS_API_URL}${id}/`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(payload),
   });
-
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(
-      `updateDeck failed: ${res.status} ${res.statusText} - ${text}`
-    );
+  if (!response.ok) {
+    throw new Error(`${response.status}: デッキの更新に失敗しました`);
   }
-
-  return (await res.json()) as Deck;
+  return (await response.json()) as Deck;
 };
 
-export const destroy = async (id: number) => {
-  const res = await fetch(`${DECKS_API_URL}${id}/`, {
+export const destroy = async (id: number): Promise<void> => {
+  const response = await fetch(`${DECKS_API_URL}${id}/`, {
     method: 'DELETE',
   });
-
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(
-      `deleteDeck failed: ${res.status} ${res.statusText} - ${text}`
-    );
+  if (!response.ok) {
+    throw new Error(`${response.status}: デッキの削除に失敗しました`);
   }
 };
