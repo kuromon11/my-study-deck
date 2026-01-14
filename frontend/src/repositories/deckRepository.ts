@@ -1,47 +1,11 @@
 import type { Deck } from './../interfaces/deck';
-import { DECKS_API_URL, REQUEST_HEADERS } from './../constants/api';
+import { createRepository } from './repository';
 
 interface Payload {
   title: string;
 }
 
-export const list = async (): Promise<Deck[]> => {
-  const response = await fetch(DECKS_API_URL);
-  if (!response.ok) {
-    throw new Error(`${response.status}: デッキの取得に失敗しました`);
-  }
-  return (await response.json()) as Deck[];
-};
-
-export const create = async (payload: Payload): Promise<Deck> => {
-  const response = await fetch(DECKS_API_URL, {
-    method: 'POST',
-    headers: REQUEST_HEADERS,
-    body: JSON.stringify(payload),
-  });
-  if (!response.ok) {
-    throw new Error(`${response.status}: デッキの登録に失敗しました`);
-  }
-  return (await response.json()) as Deck;
-};
-
-export const update = async (id: number, payload: Payload): Promise<Deck> => {
-  const response = await fetch(`${DECKS_API_URL}${id}/`, {
-    method: 'PUT',
-    headers: REQUEST_HEADERS,
-    body: JSON.stringify(payload),
-  });
-  if (!response.ok) {
-    throw new Error(`${response.status}: デッキの更新に失敗しました`);
-  }
-  return (await response.json()) as Deck;
-};
-
-export const destroy = async (id: number): Promise<void> => {
-  const response = await fetch(`${DECKS_API_URL}${id}/`, {
-    method: 'DELETE',
-  });
-  if (!response.ok) {
-    throw new Error(`${response.status}: デッキの削除に失敗しました`);
-  }
+export const deckRepository = () => {
+  const { list, create, update, destroy } = createRepository<Deck, Payload>();
+  return { list, create, update, destroy };
 };
