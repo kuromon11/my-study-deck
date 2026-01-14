@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import DialogDeckEdit from './../components/DialogDeckEdit.vue';
 import { useDecks } from './../composables/useDecks';
+import { DEFAULT_ERROR_MESSAGE } from './../constants/message';
 
 const { decks, fetchDecks, createDeck, updateDeck, deleteDeck } = useDecks();
 
@@ -23,7 +24,7 @@ const onSave = async (id: number | null, payload: { title: string }) => {
   try {
     id === null ? await createDeck(payload) : await updateDeck(id, payload);
   } catch (error: any) {
-    errorMessage.value = error?.message ?? 'デッキの保存に失敗しました';
+    errorMessage.value = error?.message ?? DEFAULT_ERROR_MESSAGE;
   } finally {
     dialog.value = false;
     loading.value = false;
@@ -36,7 +37,7 @@ const onDelete = async (id: number) => {
   try {
     await deleteDeck(id);
   } catch (error: any) {
-    errorMessage.value = error?.message ?? 'デッキの取得に失敗しました';
+    errorMessage.value = error?.message ?? DEFAULT_ERROR_MESSAGE;
   } finally {
     dialog.value = false;
     loading.value = false;
@@ -49,7 +50,7 @@ onMounted(async () => {
   try {
     await fetchDecks();
   } catch (error: any) {
-    errorMessage.value = error?.message ?? 'デッキの取得に失敗しました';
+    errorMessage.value = error?.message ?? DEFAULT_ERROR_MESSAGE;
   } finally {
     loading.value = false;
   }
