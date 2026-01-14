@@ -15,7 +15,7 @@ const headers = [
   { title: 'タイトル', key: 'title', align: 'center' },
   { title: '最終更新日', key: 'updated_at', align: 'center' },
   { title: '操作', key: 'actions', align: 'center', sortable: false },
-];
+] as const;
 
 const onSave = async (id: number | null, payload: { title: string }) => {
   loading.value = true;

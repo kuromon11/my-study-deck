@@ -20,7 +20,7 @@ const headers = [
   { title: '回答', key: 'answer', align: 'center' },
   { title: '最終更新日', key: 'updated_at', align: 'center' },
   { title: '操作', key: 'actions', align: 'center', sortable: false },
-];
+] as const;
 
 const rules = {
   required: (v: string) => !!v?.trim() || '必須です',
