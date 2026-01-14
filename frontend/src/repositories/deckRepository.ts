@@ -1,5 +1,5 @@
 import type { Deck } from './../interfaces/deck';
-import { DECKS_API_URL } from './../constants/api';
+import { DECKS_API_URL, REQUEST_HEADERS } from './../constants/api';
 
 interface Payload {
   title: string;
@@ -16,9 +16,7 @@ export const list = async (): Promise<Deck[]> => {
 export const create = async (payload: Payload): Promise<Deck> => {
   const response = await fetch(DECKS_API_URL, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: REQUEST_HEADERS,
     body: JSON.stringify(payload),
   });
   if (!response.ok) {
@@ -30,9 +28,7 @@ export const create = async (payload: Payload): Promise<Deck> => {
 export const update = async (id: number, payload: Payload): Promise<Deck> => {
   const response = await fetch(`${DECKS_API_URL}${id}/`, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: REQUEST_HEADERS,
     body: JSON.stringify(payload),
   });
   if (!response.ok) {

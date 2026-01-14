@@ -1,7 +1,7 @@
 import { ref } from 'vue';
 import type { Card } from './../interfaces/card';
 import type { CardForm } from './../interfaces/card';
-import { DECKS_API_URL } from './../constants/api';
+import { DECKS_API_URL, REQUEST_HEADERS } from './../constants/api';
 
 export const useCard = (deckId: number) => {
   const cards = ref<Card[]>([]);
@@ -18,9 +18,7 @@ export const useCard = (deckId: number) => {
   const createCard = async (payload: CardForm) => {
     const res = await fetch(`${DECKS_API_URL}${deckId}/cards/`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: REQUEST_HEADERS,
       body: JSON.stringify(payload),
     });
 
@@ -37,9 +35,7 @@ export const useCard = (deckId: number) => {
   const updateCard = async (id: number, payload: CardForm) => {
     const res = await fetch(`${DECKS_API_URL}${deckId}/cards/${id}/`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: REQUEST_HEADERS,
       body: JSON.stringify(payload),
     });
 
