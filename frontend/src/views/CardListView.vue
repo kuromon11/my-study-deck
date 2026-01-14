@@ -52,41 +52,27 @@ const openEdit = (item: Card) => {
   dialog.value = true;
 };
 
-const saving = ref(false);
 const formValid = ref(false);
 const save = async () => {
   if (!formValid.value) return;
-  saving.value = true;
+  loading.value = true;
 
   const payload = {
     question: form.value.question.trim(),
     answer: form.value.answer.trim(),
   };
   const id = editingId.value;
+  id === null ? await createCard(payload) : await updateCard(id, payload);
 
-  if (id == null) {
-    const created = await createCard(payload);
-    cards.value = [created, ...cards.value];
-    dialog.value = false;
-    saving.value = false;
-    return;
-  }
-
-  const updated = await updateCard(id, payload);
-  cards.value = cards.value.map((c) =>
-    c.id === id ? { ...c, ...updated } : c
-  );
   dialog.value = false;
-  saving.value = false;
+  loading.value = false;
 };
 
-const deleting = ref(false);
 const onDelete = async (id: number) => {
-  deleting.value = true;
+  loading.value = true;
   await deleteCard(id);
-  cards.value = cards.value.filter((c) => c.id !== id);
   dialog.value = false;
-  deleting.value = false;
+  loading.value = false;
 };
 
 const closeDialog = () => {
@@ -189,7 +175,7 @@ onMounted(init);
             v-if="editingId"
             color="error"
             variant="text"
-            :loading="deleting"
+            :loading="loading"
             @click="onDelete(editingId)"
           >
             削除
@@ -199,7 +185,7 @@ onMounted(init);
           <v-btn variant="text" @click="closeDialog"> キャンセル </v-btn>
           <v-btn
             color="primary"
-            :loading="saving"
+            :loading="loading"
             :disabled="!formValid"
             @click="save"
           >

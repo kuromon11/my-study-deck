@@ -14,16 +14,17 @@ export const useCard = (deckId: number) => {
 
   const createCard = async (payload: CardRequest) => {
     const data = await create(payload);
-    return data;
+    cards.value = [data, ...cards.value];
   };
 
   const updateCard = async (id: number, payload: CardRequest) => {
     const data = await update(id, payload);
-    return data;
+    cards.value = cards.value.map((c) => (c.id === id ? { ...c, ...data } : c));
   };
 
   const deleteCard = async (id: number) => {
     await destroy(id);
+    cards.value = cards.value.filter((c) => c.id !== id);
   };
 
   return {
