@@ -1,6 +1,7 @@
 import { ref } from 'vue';
 import type { CardWithLogs } from './../interfaces/card';
 import { DECKS_API_URL } from './../constants/api';
+import { REQUEST_HEADERS } from './../constants/api';
 
 export const useStudy = (deckId: number) => {
   const cards = ref<CardWithLogs[]>([]);
@@ -20,9 +21,7 @@ export const useStudy = (deckId: number) => {
       `${DECKS_API_URL}${deckId}/cards/${cardId}/study/`,
       {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: REQUEST_HEADERS,
         body: JSON.stringify(payload),
       }
     );

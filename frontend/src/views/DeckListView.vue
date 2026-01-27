@@ -1,92 +1,58 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import type { Deck } from '../interfaces/deck';
+import DialogDeckEdit from './../components/DialogDeckEdit.vue';
 import { useDecks } from './../composables/useDecks';
+import { DEFAULT_ERROR_MESSAGE } from './../constants/message';
 
 const { decks, fetchDecks, createDeck, updateDeck, deleteDeck } = useDecks();
 
 const loading = ref(false);
-const error = ref(null);
+const dialog = ref(false);
+const errorMessage = ref<string>('');
+const editingId = ref<number | null>(null);
 
 const headers = [
   { title: 'ID', key: 'id', align: 'center' },
   { title: 'タイトル', key: 'title', align: 'center' },
   { title: '最終更新日', key: 'updated_at', align: 'center' },
   { title: '操作', key: 'actions', align: 'center', sortable: false },
-];
+] as const;
 
-const rules = {
-  required: (v: string) => !!v?.trim() || '必須です',
-  max50: (v: string) => (v?.length ?? 0) <= 50 || '50文字以内にしてください',
-};
+const onSave = async (id: number | null, payload: { title: string }) => {
+  loading.value = true;
 
-const form = ref({
-  title: '',
-});
-
-const dialog = ref(false);
-const editingId = ref<number | null>(null);
-
-const openCreate = () => {
-  editingId.value = null;
-  form.value = { title: '' };
-  dialog.value = true;
-};
-
-const openEdit = (item: Deck) => {
-  editingId.value = item.id;
-  form.value = { title: item.title ?? '' };
-  dialog.value = true;
-};
-
-const closeDialog = () => {
-  dialog.value = false;
-  form.value = { title: '' };
-  editingId.value = null;
-};
-
-const saving = ref(false);
-const formValid = ref(false);
-const save = async () => {
-  if (!formValid.value) return;
-  saving.value = true;
-
-  const payload = { title: form.value.title.trim() };
-  const id = editingId.value;
-
-  if (id == null) {
-    const created = await createDeck(payload);
-    decks.value = [created, ...decks.value];
+  try {
+    id === null ? await createDeck(payload) : await updateDeck(id, payload);
+  } catch (error: any) {
+    errorMessage.value = error?.message ?? DEFAULT_ERROR_MESSAGE;
+  } finally {
     dialog.value = false;
-    saving.value = false;
-    return;
+    loading.value = false;
   }
-
-  const updated = await updateDeck(id, payload);
-  decks.value = decks.value.map((d) =>
-    d.id === id ? { ...d, ...updated } : d
-  );
-  dialog.value = false;
-  saving.value = false;
 };
 
-const deleting = ref(false);
 const onDelete = async (id: number) => {
-  deleting.value = true;
-  await deleteDeck(id);
-  decks.value = decks.value.filter((d) => d.id !== id);
-  dialog.value = false;
-  deleting.value = false;
+  loading.value = true;
+
+  try {
+    await deleteDeck(id);
+  } catch (error: any) {
+    errorMessage.value = error?.message ?? DEFAULT_ERROR_MESSAGE;
+  } finally {
+    dialog.value = false;
+    loading.value = false;
+  }
 };
 
 onMounted(async () => {
+  loading.value = true;
+
   try {
-    loading.value = true;
     await fetchDecks();
-    error.value = null;
+  } catch (error: any) {
+    errorMessage.value = error?.message ?? DEFAULT_ERROR_MESSAGE;
+  } finally {
     loading.value = false;
-  } catch (err: any) {
-    error.value = err.message;
   }
 });
 </script>
@@ -96,13 +62,22 @@ onMounted(async () => {
     <div class="d-flex align-center position-relative">
       <h4 class="text-h4 mx-auto">デッキ一覧</h4>
       <div class="position-absolute right-0">
-        <v-btn size="small" color="success" @click="openCreate"> 追加 </v-btn>
+        <v-btn
+          size="small"
+          color="success"
+          @click="
+            editingId = null;
+            dialog = true;
+          "
+        >
+          追加
+        </v-btn>
       </div>
     </div>
     <p class="my-2">デッキのタイトルを選択すると、カード一覧が表示されます。</p>
 
-    <v-alert v-if="error" type="error" class="mb-4">
-      {{ error }}
+    <v-alert v-if="errorMessage !== ''" type="error" class="mb-4">
+      {{ errorMessage }}
     </v-alert>
 
     <v-data-table
@@ -118,56 +93,28 @@ onMounted(async () => {
         </router-link>
       </template>
       <template #item.actions="{ item }">
-        <v-btn icon variant="text" @click="openEdit(item)">
+        <v-btn
+          icon
+          variant="text"
+          @click="
+            editingId = item.id;
+            dialog = true;
+          "
+        >
           <v-icon icon="mdi-pencil" />
         </v-btn>
       </template>
     </v-data-table>
 
-    <!-- 登録/編集モーダル -->
     <v-dialog v-model="dialog" max-width="560">
-      <v-card>
-        <v-card-title class="text-h6">
-          {{ editingId ? 'デッキ編集' : 'デッキ登録' }}
-        </v-card-title>
-
-        <v-card-text>
-          <v-form v-model="formValid" @submit.prevent>
-            <v-text-field
-              v-model="form.title"
-              label="タイトル"
-              :rules="[rules.required, rules.max50]"
-              @keydown.enter.prevent
-            />
-          </v-form>
-        </v-card-text>
-
-        <v-card-actions class="d-flex justify-space-between">
-          <div>
-            <v-btn
-              v-if="editingId"
-              variant="text"
-              color="error"
-              :loading="deleting"
-              @click="onDelete(editingId)"
-            >
-              削除
-            </v-btn>
-          </div>
-          <div class="d-flex align-center ga-2">
-            <v-btn variant="text" @click="closeDialog">キャンセル</v-btn>
-            <v-btn
-              type="submit"
-              color="primary"
-              :loading="saving"
-              :disabled="!formValid"
-              @click="save"
-            >
-              保存
-            </v-btn>
-          </div>
-        </v-card-actions>
-      </v-card>
+      <DialogDeckEdit
+        :editingId="editingId"
+        :loading="loading"
+        :deck="decks.find(({ id }) => id === editingId)"
+        @close="dialog = false"
+        @save="onSave"
+        @delete="onDelete"
+      />
     </v-dialog>
   </v-container>
 </template>

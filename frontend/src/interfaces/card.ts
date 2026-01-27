@@ -6,7 +6,7 @@ export interface Card {
   updated_at: string;
 }
 
-export interface CardForm {
+export interface CardRequest {
   question: string;
   answer: string;
 }

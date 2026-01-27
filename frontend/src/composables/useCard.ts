@@ -1,69 +1,30 @@
 import { ref } from 'vue';
-import type { Card } from './../interfaces/card';
-import type { CardForm } from './../interfaces/card';
-import { DECKS_API_URL } from './../constants/api';
+import type { Card, CardRequest } from './../interfaces/card';
+import { cardRepository } from './../repositories/cardRepository';
 
 export const useCard = (deckId: number) => {
+  const { list, create, update, destroy } = cardRepository(deckId);
+
   const cards = ref<Card[]>([]);
 
   const fetchCards = async () => {
-    const response = await fetch(`${DECKS_API_URL}${deckId}/cards/`);
-    if (!response.ok) {
-      throw new Error('Failed to fetch cards');
-    }
-    const data = await response.json();
+    const data = await list();
     cards.value = data;
   };
 
-  const createCard = async (payload: CardForm) => {
-    const res = await fetch(`${DECKS_API_URL}${deckId}/cards/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!res.ok) {
-      const text = await res.text();
-      throw new Error(
-        `createCard failed: ${res.status} ${res.statusText} - ${text}`
-      );
-    }
-
-    return (await res.json()) as Card;
+  const createCard = async (payload: CardRequest) => {
+    const data = await create(payload);
+    cards.value = [data, ...cards.value];
   };
 
-  const updateCard = async (id: number, payload: CardForm) => {
-    const res = await fetch(`${DECKS_API_URL}${deckId}/cards/${id}/`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!res.ok) {
-      const text = await res.text();
-      throw new Error(
-        `updateCard failed: ${res.status} ${res.statusText} - ${text}`
-      );
-    }
-
-    return (await res.json()) as Card;
+  const updateCard = async (id: number, payload: CardRequest) => {
+    const data = await update(id, payload);
+    cards.value = cards.value.map((c) => (c.id === id ? { ...c, ...data } : c));
   };
 
   const deleteCard = async (id: number) => {
-    const res = await fetch(`${DECKS_API_URL}${deckId}/cards/${id}/`, {
-      method: 'DELETE',
-    });
-
-    if (!res.ok) {
-      const text = await res.text();
-      throw new Error(
-        `deleteCard failed: ${res.status} ${res.statusText} - ${text}`
-      );
-    }
+    await destroy(id);
+    cards.value = cards.value.filter((c) => c.id !== id);
   };
 
   return {
